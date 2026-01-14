@@ -4,6 +4,8 @@ import fs from "fs";
 import path from "path";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const FALLBACK_LINKS = [
   "https://t.me/milena_ru/484",
@@ -38,9 +40,14 @@ export async function GET() {
       console.log("Shuffle API: Trying to read file at:", filePath);
       
       if (fs.existsSync(filePath)) {
+        const stats = fs.statSync(filePath);
+        console.log(`Shuffle API: File stats: size=${stats.size}, mtime=${stats.mtime}`);
+        
         const fileContent = fs.readFileSync(filePath, "utf-8");
+        console.log(`Shuffle API: File content length: ${fileContent.length}`);
+        
         links = fileContent
-          .split("\n")
+          .split(/[\n\r]+/)
           .map(line => {
             const match = line.match(/https?:\/\/t\.me\/[^\s\n\r]+/);
             return match ? match[0].trim() : null;
@@ -82,6 +89,13 @@ export async function GET() {
     return NextResponse.json({
       url: randomLink,
       text: randomMessage
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'Surrogate-Control': 'no-store'
+      }
     });
 
   } catch (error) {

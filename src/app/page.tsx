@@ -33,7 +33,8 @@ export default function Home() {
     try {
       console.log("Fetching from /api/shuffle...");
       const initData = (window as any).Telegram?.WebApp?.initData || "";
-      const res = await fetch("/api/shuffle", {
+      const timestamp = new Date().getTime();
+      const res = await fetch(`/api/shuffle?t=${timestamp}`, {
         cache: 'no-store',
         headers: {
           'Accept': 'application/json',
