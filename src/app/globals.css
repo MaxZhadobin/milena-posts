@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --magic-lavender: 230, 230, 250;
+  --magic-cream: 255, 253, 240;
+  --magic-gold: 197, 160, 89;
+  --magic-deep: 61, 61, 61;
+}
+
+@layer base {
+  body {
+    @apply antialiased m-0 p-0 overflow-x-hidden;
+    background-color: rgb(var(--magic-cream));
+    color: rgb(var(--magic-deep));
+  }
+}
+
+@layer components {
+  .magic-bg {
+    @apply fixed inset-0 -z-10 overflow-hidden;
+    background: radial-gradient(circle at 0% 0%, rgba(var(--magic-lavender), 0.5) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(var(--magic-cream), 1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(var(--magic-lavender), 0.2) 0%, transparent 100%);
+  }
+
+  .magic-pattern {
+    @apply absolute inset-0 opacity-[0.03] pointer-events-none;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C5A059' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .glass-card {
+    @apply relative overflow-hidden rounded-[40px] border border-white/50 bg-white/40 backdrop-blur-2xl shadow-2xl;
+    box-shadow: 0 20px 50px rgba(var(--magic-lavender), 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  }
+
+  .magic-glow {
+    @apply absolute rounded-full blur-[100px] pointer-events-none opacity-50;
+  }
+}
+
+/* Custom Animations */
+@keyframes star-flicker {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.animate-star {
+  animation: star-flicker 3s infinite ease-in-out;
+}
