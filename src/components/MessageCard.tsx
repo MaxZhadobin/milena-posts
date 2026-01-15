@@ -10,6 +10,18 @@ interface MessageCardProps {
 }
 
 export function MessageCard({ text, url, onClose }: MessageCardProps) {
+  const handleOpenPost = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (typeof window !== "undefined" && (window as any).Telegram?.WebApp) {
+      const tg = (window as any).Telegram.WebApp;
+      // Используем openLink для корректного открытия в Telegram
+      tg.openLink(url);
+      // Закрываем Mini App
+      tg.close();
+      // Предотвращаем стандартное поведение ссылки
+      e.preventDefault();
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8, rotateY: 90 }}
@@ -52,8 +64,7 @@ export function MessageCard({ text, url, onClose }: MessageCardProps) {
               whileHover={{ scale: 1.02, x: 5 }}
               whileTap={{ scale: 0.98 }}
               href={url}
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={handleOpenPost}
               className="flex items-center justify-center gap-3 w-full max-w-[280px] py-5 px-8 bg-magic-deep text-white rounded-[24px] font-sans font-medium hover:shadow-xl hover:shadow-magic-deep/20 transition-all"
             >
               Открыть пост
