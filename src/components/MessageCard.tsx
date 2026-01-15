@@ -13,8 +13,14 @@ export function MessageCard({ text, url, onClose }: MessageCardProps) {
   const handleOpenPost = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (typeof window !== "undefined" && (window as any).Telegram?.WebApp) {
       const tg = (window as any).Telegram.WebApp;
-      // Используем openLink для корректного открытия в Telegram
-      tg.openLink(url);
+      
+      // Для ссылок t.me используем openTelegramLink, чтобы открывать внутри приложения
+      if (url.includes('t.me/')) {
+        tg.openTelegramLink(url);
+      } else {
+        tg.openLink(url);
+      }
+      
       // Закрываем Mini App
       tg.close();
       // Предотвращаем стандартное поведение ссылки
